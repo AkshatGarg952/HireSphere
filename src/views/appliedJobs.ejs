@@ -775,7 +775,7 @@ let jobs = [];
 async function fetchJobs() {
      const user = "<%= userId %>"
      console.log(user);
-        Url = `http://localhost:5000/api/jobs/allApplied/${user}`;
+        Url = `https://hiresphere-oaqo.onrender.com/api/jobs/allApplied/${user}`;
     
     try {
         const response = await fetch(Url, {
