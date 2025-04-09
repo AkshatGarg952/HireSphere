@@ -10,6 +10,7 @@ import recruiterRouter from "./src/features/recruiters/recruiters.routes.js";
 import applicantRouter from "./src/features/applicants/applicants.routes.js";
 import jobRouter from "./src/features/jobs/job.routes.js";
 
+
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,7 +44,7 @@ app.get('/error', (req, res)=>{
 
 
 
-app.listen(5000, () => {
+app.listen(process.env.PORT_NO, () => {
     connectDB();
     console.log('Listening on port 5000')
     });
