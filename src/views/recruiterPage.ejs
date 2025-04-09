@@ -922,9 +922,9 @@ let jobs = [];
 async function fetchJobs(filter) {
     const recruiter = "<%= recruiterId %>";
     console.log(recruiter);
-     let Url = `http://localhost:5000/api/jobs/hiringR/${recruiter}/${filter}`;
+     let Url = `https://hiresphere-oaqo.onrender.com/api/jobs/hiringR/${recruiter}/${filter}`;
      if(filter==='all'){
-         Url = `http://localhost:5000/api/jobs/postedJobs/${recruiter}`;
+         Url = `https://hiresphere-oaqo.onrender.com/api/jobs/postedJobs/${recruiter}`;
      }
      
      try {
