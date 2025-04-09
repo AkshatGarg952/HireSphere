@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #a685e2, #6b4de6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 1s ease-out, float 6s ease-in-out infinite;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #333;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff5e62, #ff9966);
+            animation: lineExpand 1.5s forwards 0.5s;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            animation: slideUp 0.8s ease-out 0.3s both;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #6b4de6, #a685e2);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(107, 77, 230, 0.4);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.7s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #6b4de6, #ff9966);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1;
+            margin-bottom: 20px;
+            position: relative;
+            animation: scaleIn 0.7s ease-out;
+        }
+        
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(1px);
+            animation: float 8s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(107, 77, 230, 0.6);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(107, 77, 230, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(107, 77, 230, 0);
+            }
+        }
+        
+        @keyframes lineExpand {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .cog {
+            position: absolute;
+            opacity: 0.2;
+            animation: spin 20s linear infinite;
+        }
+        
+        .cog-1 {
+            top: 20%;
+            left: 10%;
+            width: 60px;
+            height: 60px;
+            animation-duration: 15s;
+        }
+        
+        .cog-2 {
+            bottom: 15%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+        
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin-top: 30px;
+            overflow: hidden;
+            animation: slideUp 0.8s ease-out 0.8s both;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #6b4de6, #a685e2);
+            border-radius: 4px;
+            animation: progress 3s ease-out forwards;
+        }
+        
+        @keyframes progress {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-code">404</div>
+        <h1>Validation Error</h1>
+        <p>Please make sure that the email that you are using is correct and the password must be of length3!</p>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        <p>Click the button below to redirect to the homepage</p>
+        <a href="/" class="btn">Redirect</a>
+    </div>
+    
+    <svg class="cog cog-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#6b4de6" d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,19c-2.9-1.7-6-3.1-9.3-3.9L55.7,1.4H44.3l-2.9,13.6c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L19,30.1c-1.7,2.9-3.1,6-3.9,9.3L1.4,42.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3l-7.6,11.7l8,8L32.1,81c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L81,67.9c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z"/>
+    </svg>
+    
+    <svg class="cog cog-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#a685e2" d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,19c-2.9-1.7-6-3.1-9.3-3.9L55.7,1.4H44.3l-2.9,13.6c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L19,30.1c-1.7,2.9-3.1,6-3.9,9.3L1.4,42.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3l-7.6,11.7l8,8L32.1,81c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L81,67.9c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65c-8.3,0-15-6.7-15-15c0-8.3,6.7-15,15-15s15,6.7,15,15C65,58.3,58.3,65,50,65z"/>
+    </svg>
+    
+    <script>
+        // Create floating bubbles
+        function createBubbles() {
+            const body = document.querySelector('body');
+            const bubbleCount = 15;
+            
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                // Random size
+                const size = Math.random() * 100 + 50;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // Random position
+                bubble.style.left = `${Math.random() * 100}vw`;
+                bubble.style.top = `${Math.random() * 100}vh`;
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 10 + 5;
+                const delay = Math.random() * 5;
+                bubble.style.animationDuration = `${duration}s`;
+                bubble.style.animationDelay = `${delay}s`;
+                
+                body.appendChild(bubble);
+            }
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const body = document.querySelector('body');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                // Random animation
+                const duration = Math.random() * 20 + 10;
+                particle.style.animation = `float ${duration}s infinite`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                body.appendChild(particle);
+            }
+        }
+        
+        // Initialize animations
+        window.addEventListener('load', () => {
+            createBubbles();
+            createParticles();
+            
+           
+        });
+    </script>
+</body>
+</html>

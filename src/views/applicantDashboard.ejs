@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHunt - Applicant Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+:root {
+    --primary-color: #8a2be2;
+    --secondary-color: #ff6f00;
+    --accent-color: #00bcd4;
+    --light-color: #f8f9fa;
+    --dark-color: #333333;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+/* Navbar Styles */
+.align{
+    text-align: center;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.primary-text {
+    color: var(--primary-color);
+}
+
+.secondary-text {
+    color: var(--secondary-color);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.nav-links a {
+    color: var(--dark-color);
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: var(--transition);
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary-color);
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 1.5rem;
+}
+
+.search-container input {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+    width: 200px;
+    font-size: 0.9rem;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    color: #777;
+    font-size: 1.5rem;
+}
+
+.post-job-btn, .logout-btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.post-job-btn {
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+}
+
+.post-job-btn:hover {
+    background-color: #7928c9;
+}
+
+.logout-btn {
+    background-color: transparent;
+    color: var(--dark-color);
+    border: 1px solid #ddd;
+    font-size: 1.3rem;
+}
+
+.logout-btn:hover {
+    background-color: #f1f1f1;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Container Styles */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h2 {
+    font-size: 2rem;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Stats Container */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.stat-card h3 {
+    font-size: 1.8rem;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: #666;
+    font-size: 1rem;
+}
+
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close {
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    color: var(--dark-color);
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: var(--transition);
+}
+
+.submit-btn:hover {
+    background-color: #7928c9;
+}
+
+/* Footer Styles */
+footer {
+    background-color: white;
+    padding: 3rem 5% 1rem;
+    margin-top: 3rem;
+    border-top: 1px solid #eee;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-logo h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-logo p {
+    color: #666;
+    max-width: 300px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.footer-links-column h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+}
+
+.footer-links-column a {
+    display: block;
+    color: #666;
+    margin-bottom: 0.7rem;
+    transition: var(--transition);
+}
+
+.footer-links-column a:hover {
+    color: var(--primary-color);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+    }
+
+    .logo {
+    order: 1; /* Logo appears first */
+  }
+  
+  /* Assuming you have a search button with class 'search-btn' */
+  .search-btn {
+    order: 2; /* Search button appears second */
+    margin-right: 10px;
+  }
+  
+  .menu-toggle {
+    order: 3; /* Hamburger menu appears third/last */
+  }
+
+    .nav-links {
+        order:4;
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        background-color: white;
+        width: 100%;
+        height: calc(100vh - 70px);
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        transition: var(--transition);
+        box-shadow: var(--box-shadow);
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    .search-container input {
+        width: 100%;
+    }
+
+    .post-job-btn, .logout-btn {
+        width: 100%;
+    }
+
+    .jobs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .jobs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .filter-sort {
+        width: 100%;
+    }
+
+    .filter-sort select {
+        width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h1><span class="primary-text">Job</span><span class="secondary-text">Hunt</span></h1>
+        </div>
+        <div class="nav-links">
+            <a href="/?user=<%=userId%>">Home</a>
+            <a href='/api/applicants/applicantPage?userId=<%=userId%>'>Jobs</a>
+            <a href='/api/applicants/applicantDashboard?userId=<%=userId%>' class="active">Dashboard</a>
+            <button class="logout-btn">Logout</button>
+        </div>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="dashboard-header">
+            <h2>Applicant Dashboard</h2>
+            <p>Manage your applied jobs and applications</p>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-briefcase"></i>
+                <h3>12</h3>
+                <p>Applied Jobs</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <h3>48</h3>
+                <p>Saved Jobs</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-eye"></i>
+                <h3>320</h3>
+                <p>Profile Views</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-user-check"></i>
+                <h3>8</h3>
+                <p>Interviews</p>
+            </div>
+        </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2><span class="primary-text">Job</span><span class="secondary-text">Hunt</span></h2>
+                <p>Find the perfect talent for your company</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-links-column">
+                    <h3>For Recruiters</h3>
+                    <a href="#">Post a Job</a>
+                    <a href="#">Find Candidates</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-links-column">
+                    <h3>For Job Seekers</h3>
+                    <a href="#">Browse Jobs</a>
+                    <a href="#">Career Advice</a>
+                    <a href="#">Resume Builder</a>
+                </div>
+                <div class="footer-links-column">
+                    <h3>Company</h3>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 JobHunt. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script >
+        // DOM Elements
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+const jobForm = document.getElementById('jobForm');
+const filterSelect = document.getElementById('jobFilter');
+
+// Toggle mobile menu
+menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+   
+
+    
+    // Update icon
+    if (navLinks.classList.contains('active')) {
+        menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+    } else {
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+});
+
+
+
+
+// Close modal when clicking outside the modal content
+window.addEventListener('click', (e) => {
+    if (e.target === jobModal) {
+        jobModal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+    }
+});
+
+
+
+document.querySelector(".logout-btn").addEventListener("click", function () {
+    window.location.href = "/api/applicants/logout"; 
+});
+    </script>
+</body>
+</html>

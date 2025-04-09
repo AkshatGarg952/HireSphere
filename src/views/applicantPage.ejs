@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobHunt - Applicant Page</title>
+    <style>
+        /* Global Styles */
+:root {
+    --primary-color: #8a2be2;
+    --secondary-color: #ff6f00;
+    --accent-color: #00bcd4;
+    --light-color: #f8f9fa;
+    --dark-color: #333333;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background-color: white;
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.primary-text {
+    color: var(--primary-color);
+}
+
+.secondary-text {
+    color: var(--secondary-color);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.nav-links a {
+    color: var(--dark-color);
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: var(--transition);
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary-color);
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 1.5rem;
+}
+
+.search-container input {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+    width: 200px;
+    font-size: 0.9rem;
+}
+
+.search-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    color: #777;
+    font-size: 1.5rem;
+}
+
+.post-job-btn, .logout-btn {
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.post-job-btn {
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+}
+
+.post-job-btn:hover {
+    background-color: #7928c9;
+}
+
+.logout-btn {
+    background-color: transparent;
+    color: var(--dark-color);
+    border: 1px solid #ddd;
+    font-size: 1.3rem;
+}
+
+.logout-btn:hover {
+    background-color: #f1f1f1;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Container Styles */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+
+/* Stats Container */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.stat-card h3 {
+    font-size: 1.8rem;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Jobs Container */
+.jobs-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+}
+
+.jobs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.jobs-header h2 {
+    font-size: 1.5rem;
+    color: var(--dark-color);
+}
+
+.filter-sort select {
+    padding: 0.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+}
+
+.jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.job-card {
+    border: 1px solid #eee;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: var(--transition);
+    position: relative;
+}
+
+.job-card:hover {
+    box-shadow: var(--box-shadow);
+    border-color: transparent;
+}
+
+.job-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.job-status.active {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--success-color);
+}
+
+.job-title {
+    font-size: 1.3rem;
+    margin: 1rem 0;
+    color: var(--dark-color);
+}
+
+.job-category {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.job-category span {
+    color: var(--accent-color);
+}
+
+.job-location, .job-salary {
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.job-skills, .job-skills-secondary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.job-skills span, .job-skills-secondary span {
+    background-color: rgba(138, 43, 226, 0.1);
+    color: var(--primary-color);
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.job-skills-secondary span {
+    background-color: rgba(0, 188, 212, 0.1);
+    color: var(--accent-color);
+}
+
+.job-stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.job-details-btn {
+    display: block;
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 0.7rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    margin-top: 1rem;
+    transition: var(--transition);
+}
+
+.job-details-btn:hover {
+    background-color: #7928c9;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 200;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    animation: modalFadeIn 0.3s;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close {
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    color: var(--dark-color);
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: var(--transition);
+}
+
+.submit-btn:hover {
+    background-color: #7928c9;
+}
+
+/* Footer Styles */
+footer {
+    background-color: white;
+    padding: 3rem 5% 1rem;
+    margin-top: 3rem;
+    border-top: 1px solid #eee;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-logo h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-logo p {
+    color: #666;
+    max-width: 300px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.footer-links-column h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+}
+
+.footer-links-column a {
+    display: block;
+    color: #666;
+    margin-bottom: 0.7rem;
+    transition: var(--transition);
+}
+
+.footer-links-column a:hover {
+    color: var(--primary-color);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .logo {
+        order: 1;
+        flex: 1;
+    }
+
+    .mobile-search {
+        order: 2;
+        display: flex;
+        width: auto;
+        margin-right: 10px;
+    }
+
+    .menu-toggle {
+        order: 3;
+        display: block;
+    }
+
+    .nav-links {
+        order: 4;
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        background-color: white;
+        width: 100%;
+        height: calc(100vh - 70px);
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        transition: var(--transition);
+        box-shadow: var(--box-shadow);
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .desktop-search {
+        display: none;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    .search-container input {
+        width: 100%;
+    }
+
+    .post-job-btn, .logout-btn {
+        width: 100%;
+    }
+
+    .jobs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}
+
+/* Add this to your base CSS (outside media query) */
+.navbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Hide mobile search by default on larger screens */
+.mobile-search {
+    display: none;
+}
+
+/* Main media query for mobile view */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        order: 1;
+    }
+
+    /* Make mobile search visible */
+    .mobile-search {
+        display: flex;
+        order: 2;
+        width: auto;
+        margin-right: 10px;
+    }
+
+    .menu-toggle {
+        order: 3;
+        display: block;
+    }
+
+    .nav-links {
+        order: 4;
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        background-color: white;
+        width: 100%;
+        height: calc(100vh - 70px);
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        transition: var(--transition);
+        box-shadow: var(--box-shadow);
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    /* Hide desktop search on mobile */
+    .desktop-search {
+        display: none;
+    }
+
+    /* Other styles remain the same */
+}
+
+
+
+
+@media (max-width: 480px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .jobs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .filter-sort {
+        width: 100%;
+    }
+
+    .filter-sort select {
+        width: 100%;
+    }
+}
+
+.jobs-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.tab-button {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    position: relative;
+}
+
+.tab-button::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: transparent;
+}
+
+.tab-button.active {
+    color: #0066cc;
+    font-weight: 600;
+}
+
+.tab-button.active::after {
+    background: #0066cc;
+}
+
+
+.inactive{
+    background-color: #fde8e8; /* Light red background */
+    color: #d93025; /* Bold red text */
+}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h1><span class="primary-text">Job</span><span class="secondary-text">Hunt</span></h1>
+        </div>
+        <div class="search-container mobile-search">
+            <input type="text" id="searchInput" placeholder="Search jobs...">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="nav-links">
+            <a href="/?user=<%=userId%>" >Home</a>
+            <a href='/api/applicants/applicantPage?userId=<%=userId%>' class="active">Jobs</a>
+            <a href='/api/applicants/applicantDashboard?userId=<%=userId%>'>Dashboard</a>
+            <div class="search-container desktop-search">
+                <input type="text" id="searchInput" placeholder="Search jobs...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <button class="logout-btn">Logout</button>
+        </div>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <div class="jobs-container">
+            <div class="jobs-header">
+                <div class="jobs-tabs">
+                    <button class="tab-button active" id="allJobsTab">All Jobs</button>
+                    <button class="tab-button" id="appliedJobsTab">Applied Jobs</button>
+                </div>
+                <div class="filter-sort">
+                    <select id="jobFilter">
+                        <option value="all">All</option>
+                        <option value="Actively Hiring">Active</option>
+                        <option value="Hiring Closed">Closed</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="jobs-grid">
+            
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2><span class="primary-text">Job</span><span class="secondary-text">Hunt</span></h2>
+                <p>Find the perfect talent for your company</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-links-column">
+                    <h3>For Recruiters</h3>
+                    <a href="#">Post a Job</a>
+                    <a href="#">Find Candidates</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-links-column">
+                    <h3>For Job Seekers</h3>
+                    <a href="#">Browse Jobs</a>
+                    <a href="#">Career Advice</a>
+                    <a href="#">Resume Builder</a>
+                </div>
+                <div class="footer-links-column">
+                    <h3>Company</h3>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 JobHunt. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+// const menuToggle = document.querySelector('.menu-toggle');
+// const navLinks = document.querySelector('.nav-links');
+// const filterSelect = document.getElementById('jobFilter');
+
+// // Toggle mobile menu
+// menuToggle.addEventListener('click', () => {
+//     navLinks.classList.toggle('active');
+//     if (navLinks.classList.contains('active')) {
+//         menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+//     } else {
+//         menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+//     }
+// });
+
+
+const menuToggle = document.querySelector('.menu-toggle');
+const navLinks = document.querySelector('.nav-links');
+const filterSelect = document.getElementById('jobFilter');
+
+// Search functionality - update to handle both search inputs
+const mobileSearchInput = document.querySelector('.mobile-search #searchInput');
+const desktopSearchInput = document.querySelector('.desktop-search #searchInput');
+const mobileSearchBtn = document.querySelector('.mobile-search .search-btn');
+const desktopSearchBtn = document.querySelector('.desktop-search .search-btn');
+
+// Toggle mobile menu
+menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    if (navLinks.classList.contains('active')) {
+        menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+    } else {
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    }
+});
+
+
+
+// Filter jobs
+filterSelect.addEventListener('change', () => {
+    const filter = filterSelect.value;
+    const jobCards = document.querySelectorAll('.job-card');
+    
+    jobCards.forEach(card => {
+        const status = card.querySelector('.job-status').textContent.toLowerCase();
+        
+        if (filter === 'all' || status.includes(filter)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+// Fetch All Jobs
+let jobs = []
+async function fetchJobs(filter) {
+    //  const user = "<%= userId %>"
+     
+    let Url = `http://localhost:5000/api/jobs/hiringA/${filter}`;
+    if(filter==='all'){
+        Url = `http://localhost:5000/api/jobs/allJobs`;
+    }
+    
+    try {
+        const response = await fetch(Url, {
+            method: "GET",
+            credentials: "include",
+        });
+
+        if (!response.ok) {
+            throw new Error("No Jobs found");
+        }
+
+        jobs = await response.json();
+        displayJobs(jobs);
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+ function displayJobs(jobs){
+    const user = "<%= userId %>"
+    const user2 = <%- JSON.stringify(userId) %>;
+    console.log(user2);
+    
+
+
+    const container = document.querySelector(".jobs-grid");
+        container.innerHTML = "";
+        jobs.forEach((job) => {
+             
+    const userHasApplied = job.applicants.includes(user2);
+            // Create job card
+            const jobCard = document.createElement("div");
+            jobCard.className = "job-card";
+            // Job status
+            const jobStatus = document.createElement("div");
+            jobStatus.innerText = job.hiring;
+            if(job.hiring==='Actively Hiring'){
+             jobStatus.className = "job-status active";
+             }
+
+             else{
+            jobStatus.className = "job-status inactive";
+             
+             }
+            // Job title
+            const jobTitle = document.createElement("h3");
+            jobTitle.className = "job-title";
+            jobTitle.innerText = job.title;
+            // Job category
+            const jobCategory = document.createElement("div");
+            jobCategory.className = "job-category";
+            jobCategory.innerHTML = `Tech <span>${job.category}</span>`;
+            // Job company
+            const jobCompany = document.createElement("div");
+               jobCompany.className = "job-location";
+               jobCompany.innerHTML = `<i class="fa-solid fa-building"></i><span>${job.company}</span>`;
+            // Job location
+            const jobLocation = document.createElement("div");
+            jobLocation.className = "job-location";
+            jobLocation.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${job.location}`;
+
+            // Job salary
+            const jobSalary = document.createElement("div");
+            jobSalary.className = "job-salary";
+            jobSalary.innerHTML = `<i class="fas fa-rupee-sign"></i> ${job.salary}`;
+
+            // Job skills
+            const jobSkills = document.createElement("div");
+            jobSkills.className = "job-skills";
+            job.requirements.forEach((skill) => {
+                const skillSpan = document.createElement("span");
+                skillSpan.innerText = skill;
+                jobSkills.appendChild(skillSpan);
+            });
+
+            // Job stats
+            const jobStats = document.createElement("div");
+            jobStats.className = "job-stats";
+          
+
+            // View details button
+            const jobDetailsBtn = document.createElement("a");
+            if(job.maxCandidates===job.applicants.length || userHasApplied) {
+                jobDetailsBtn.href = `/api/jobs/details3/${job._id}/${user}`;
+            }
+
+            else{
+            jobDetailsBtn.href = `/api/jobs/details2/${job._id}/${user}`;
+            }
+            jobDetailsBtn.className = "job-details-btn";
+            jobDetailsBtn.innerText = "View details";
+
+            // Append elements
+            jobCard.appendChild(jobStatus);
+            jobCard.appendChild(jobTitle);
+            jobCard.appendChild(jobCategory);
+            jobCard.appendChild(jobCompany);
+            jobCard.appendChild(jobLocation);
+            jobCard.appendChild(jobSalary);
+            jobCard.appendChild(jobSkills);
+            jobCard.appendChild(jobStats);
+            jobCard.appendChild(jobDetailsBtn);
+
+            container.appendChild(jobCard);
+        });
+}
+
+    
+
+document.addEventListener("DOMContentLoaded", () => {
+    const jobFilter = document.getElementById("jobFilter");
+
+    fetchJobs(jobFilter.value);
+
+    jobFilter.addEventListener("change", () => {
+        fetchJobs(jobFilter.value);
+    });
+});
+
+
+// search 
+if (mobileSearchInput) {
+    mobileSearchInput.addEventListener('input', (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const filteredJobs = jobs.filter(job =>
+    job.title.toLowerCase().includes(searchTerm)
+  );
+  displayJobs(filteredJobs);
+});
+}
+
+if (desktopSearchInput) {
+    desktopSearchInput.addEventListener('input', (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const filteredJobs = jobs.filter(job =>
+    job.title.toLowerCase().includes(searchTerm)
+  );
+  displayJobs(filteredJobs);
+});
+}
+
+
+// document.getElementById('searchInput').addEventListener('input', (e) => {
+//   const searchTerm = e.target.value.toLowerCase();
+//   const filteredJobs = jobs.filter(job =>
+//     job.title.toLowerCase().includes(searchTerm)
+//   );
+//   displayJobs(filteredJobs);
+// });
+
+
+
+
+
+document.querySelector(".logout-btn").addEventListener("click", function () {
+    window.location.href = "/api/applicants/logout"; 
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const user = "<%= userId %>";
+    const allJobsTab = document.getElementById('allJobsTab');
+    const appliedJobsTab = document.getElementById('appliedJobsTab');
+    
+    allJobsTab.addEventListener('click', function() {
+        // Set active state
+        allJobsTab.classList.add('active');
+        appliedJobsTab.classList.remove('active');
+        
+        window.location.href = `/api/applicants/applicantPage?userId=${user}`;
+
+    });
+    
+    appliedJobsTab.addEventListener('click', function() {
+        // Set active state
+        appliedJobsTab.classList.add('active');
+        allJobsTab.classList.remove('active');
+        
+        
+        window.location.href = `/api/applicants/applicantPage2?userId=${user}`;
+    });
+});
+    </script>
+</body>
+</html>
