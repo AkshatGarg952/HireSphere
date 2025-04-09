@@ -835,9 +835,9 @@ let jobs = []
 async function fetchJobs(filter) {
     //  const user = "<%= userId %>"
      
-    let Url = `http://localhost:5000/api/jobs/hiringA/${filter}`;
+    let Url = `https://hiresphere-oaqo.onrender.com/api/jobs/hiringA/${filter}`;
     if(filter==='all'){
-        Url = `http://localhost:5000/api/jobs/allJobs`;
+        Url = `https://hiresphere-oaqo.onrender.com/api/jobs/allJobs`;
     }
     
     try {
