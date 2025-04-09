@@ -1,5 +1,5 @@
 import express from 'express';
-import connectDB  from '../Job/mongoose.js';
+import connectDB  from './mongoose.js';
 import expressLayouts from 'express-ejs-layouts';
 import ejsLayouts from "express-ejs-layouts";
 import path from 'path'
